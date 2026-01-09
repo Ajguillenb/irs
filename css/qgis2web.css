@@ -1,6 +1,6 @@
 
         #map {
-            background-color: #ffffff
+            background-color: #c2eaff
         }
         html, body, #map {
 			overflow: hidden;
@@ -197,7 +197,111 @@
         .leaflet-control-layers-expanded .leaflet-control-layers-toggle {
             display: none;
         }
-        .css_CANARIAS_0 {
+        .css_Capacidadestructural_0 {
+            text-shadow: -2px -2px 0 #a6cee3,
+                -2px -1px 0 #a6cee3,
+                -2px 0px 0 #a6cee3,
+                -2px 1px 0 #a6cee3,
+                -2px 2px 0 #a6cee3,
+                -1px -2px 0 #a6cee3,
+                -1px -1px 0 #a6cee3,
+                -1px 0px 0 #a6cee3,
+                -1px 1px 0 #a6cee3,
+                -1px 2px 0 #a6cee3,
+                0px -2px 0 #a6cee3,
+                0px -1px 0 #a6cee3,
+                0px 1px 0 #a6cee3,
+                0px 2px 0 #a6cee3,
+                1px -2px 0 #a6cee3,
+                1px -1px 0 #a6cee3,
+                1px 0px 0 #a6cee3,
+                1px 1px 0 #a6cee3,
+                1px 2px 0 #a6cee3,
+                2px -2px 0 #a6cee3,
+                2px -1px 0 #a6cee3,
+                2px 0px 0 #a6cee3,
+                2px 1px 0 #a6cee3,
+                2px 2px 0 #a6cee3;
+        }
+        .css_Redundancia_1 {
+            text-shadow: -2px -2px 0 #a6cee3,
+                -2px -1px 0 #a6cee3,
+                -2px 0px 0 #a6cee3,
+                -2px 1px 0 #a6cee3,
+                -2px 2px 0 #a6cee3,
+                -1px -2px 0 #a6cee3,
+                -1px -1px 0 #a6cee3,
+                -1px 0px 0 #a6cee3,
+                -1px 1px 0 #a6cee3,
+                -1px 2px 0 #a6cee3,
+                0px -2px 0 #a6cee3,
+                0px -1px 0 #a6cee3,
+                0px 1px 0 #a6cee3,
+                0px 2px 0 #a6cee3,
+                1px -2px 0 #a6cee3,
+                1px -1px 0 #a6cee3,
+                1px 0px 0 #a6cee3,
+                1px 1px 0 #a6cee3,
+                1px 2px 0 #a6cee3,
+                2px -2px 0 #a6cee3,
+                2px -1px 0 #a6cee3,
+                2px 0px 0 #a6cee3,
+                2px 1px 0 #a6cee3,
+                2px 2px 0 #a6cee3;
+        }
+        .css_IRS_2 {
+            text-shadow: -2px -2px 0 #a6cee3,
+                -2px -1px 0 #a6cee3,
+                -2px 0px 0 #a6cee3,
+                -2px 1px 0 #a6cee3,
+                -2px 2px 0 #a6cee3,
+                -1px -2px 0 #a6cee3,
+                -1px -1px 0 #a6cee3,
+                -1px 0px 0 #a6cee3,
+                -1px 1px 0 #a6cee3,
+                -1px 2px 0 #a6cee3,
+                0px -2px 0 #a6cee3,
+                0px -1px 0 #a6cee3,
+                0px 1px 0 #a6cee3,
+                0px 2px 0 #a6cee3,
+                1px -2px 0 #a6cee3,
+                1px -1px 0 #a6cee3,
+                1px 0px 0 #a6cee3,
+                1px 1px 0 #a6cee3,
+                1px 2px 0 #a6cee3,
+                2px -2px 0 #a6cee3,
+                2px -1px 0 #a6cee3,
+                2px 0px 0 #a6cee3,
+                2px 1px 0 #a6cee3,
+                2px 2px 0 #a6cee3;
+        }
+        .css_Presinasistencial_3 {
+            text-shadow: -2px -2px 0 #a6cee3,
+                -2px -1px 0 #a6cee3,
+                -2px 0px 0 #a6cee3,
+                -2px 1px 0 #a6cee3,
+                -2px 2px 0 #a6cee3,
+                -1px -2px 0 #a6cee3,
+                -1px -1px 0 #a6cee3,
+                -1px 0px 0 #a6cee3,
+                -1px 1px 0 #a6cee3,
+                -1px 2px 0 #a6cee3,
+                0px -2px 0 #a6cee3,
+                0px -1px 0 #a6cee3,
+                0px 1px 0 #a6cee3,
+                0px 2px 0 #a6cee3,
+                1px -2px 0 #a6cee3,
+                1px -1px 0 #a6cee3,
+                1px 0px 0 #a6cee3,
+                1px 1px 0 #a6cee3,
+                1px 2px 0 #a6cee3,
+                2px -2px 0 #a6cee3,
+                2px -1px 0 #a6cee3,
+                2px 0px 0 #a6cee3,
+                2px 1px 0 #a6cee3,
+                2px 2px 0 #a6cee3;
+        }
+        .css_Vulnerabiliadmunicipal_4 {
             text-shadow: -2px -2px 0 #a6cee3,
                 -2px -1px 0 #a6cee3,
                 -2px 0px 0 #a6cee3,

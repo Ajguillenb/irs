@@ -13,6 +13,7 @@
         <link rel="stylesheet" href="css/filter.css">
 <link rel="stylesheet" href="css/nouislider.min.css">
         <link rel="stylesheet" href="css/leaflet.photon.css">
+        <link rel="stylesheet" href="css/leaflet-measure.css">
         <style>
         html, body, #map {
             width: 100%;
@@ -37,10 +38,15 @@
         <script src="js/labelgun.min.js"></script>
         <script src="js/labels.js"></script>
         <script src="js/leaflet.photon.js"></script>
+        <script src="js/leaflet-measure.js"></script>
         <script src="js/tailDT.js"></script>
 <script src="js/nouislider.min.js"></script>
 <script src="js/wNumb.js"></script>
-        <script src="data/CANARIAS_0.js"></script>
+        <script src="data/Capacidadestructural_0.js"></script>
+        <script src="data/Redundancia_1.js"></script>
+        <script src="data/IRS_2.js"></script>
+        <script src="data/Presinasistencial_3.js"></script>
+        <script src="data/Vulnerabiliadmunicipal_4.js"></script>
         <script>
         var highlightLayer;
         function highlightFeature(e) {
@@ -56,11 +62,10 @@
                 fillOpacity: 1
               });
             }
-            highlightLayer.openPopup();
         }
         var map = L.map('map', {
             zoomControl:false, maxZoom:28, minZoom:7
-        }).fitBounds([[28.33826130481055,-16.60673866905829],[28.4508919233955,-16.355809496124312]]);
+        })
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
@@ -128,23 +133,29 @@
         var zoomControl = L.control.zoom({
             position: 'topleft'
         }).addTo(map);
+        var measureControl = new L.Control.Measure({
+            position: 'topleft',
+            primaryLengthUnit: 'meters',
+            secondaryLengthUnit: 'kilometers',
+            primaryAreaUnit: 'sqmeters',
+            secondaryAreaUnit: 'hectares'
+        });
+        measureControl.addTo(map);
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0].innerHTML = '';
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0].className += ' fas fa-ruler';
         var bounds_group = new L.featureGroup([]);
         function setBounds() {
+            if (bounds_group.getLayers().length) {
+                map.fitBounds(bounds_group.getBounds());
+            }
         }
-        function pop_CANARIAS_0(feature, layer) {
+        function pop_Capacidadestructural_0(feature, layer) {
             layer.on({
                 mouseout: function(e) {
                     for (var i in e.target._eventParents) {
                         if (typeof e.target._eventParents[i].resetStyle === 'function') {
                             e.target._eventParents[i].resetStyle(e.target);
                         }
-                    }
-                    if (typeof layer.closePopup == 'function') {
-                        layer.closePopup();
-                    } else {
-                        layer.eachLayer(function(feature){
-                            feature.closePopup()
-                        });
                     }
                 },
                 mouseover: highlightFeature,
@@ -158,8 +169,8 @@
                         <td class="visible-with-data" id="isla">' + (feature.properties['isla'] !== null ? autolinker.link(String(feature.properties['isla']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">Vulnerabilidad </th>\
-                        <td>' + (feature.properties['Vulnerabilidad '] !== null ? autolinker.link(String(feature.properties['Vulnerabilidad ']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                        <th scope="row">Capacidad</th>\
+                        <td class="visible-with-data" id="Capacidad">' + (feature.properties['Capacidad'] !== null ? autolinker.link(String(feature.properties['Capacidad']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             var content = removeEmptyRowsFromPopupContent(popupContent, feature);
@@ -169,11 +180,11 @@
 			layer.bindPopup(content, { maxHeight: 400 });
         }
 
-        function style_CANARIAS_0_0(feature) {
-            switch(String(feature.properties['Vulnerabilidad '])) {
-                case 'Muy alta vulnerabilidad':
+        function style_Capacidadestructural_0_0(feature) {
+            switch(String(feature.properties['Capacidad'])) {
+                case 'Baja capacidad estructural':
                     return {
-                pane: 'pane_CANARIAS_0',
+                pane: 'pane_Capacidadestructural_0',
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
                 dashArray: '',
@@ -182,13 +193,13 @@
                 weight: 1.0, 
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(215,25,28,1.0)',
+                fillColor: 'rgba(247,252,245,1.0)',
                 interactive: true,
             }
                     break;
-                case 'Alta vulnerabilidad':
+                case 'Capacidad estructural media':
                     return {
-                pane: 'pane_CANARIAS_0',
+                pane: 'pane_Capacidadestructural_0',
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
                 dashArray: '',
@@ -197,13 +208,13 @@
                 weight: 1.0, 
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(253,174,97,1.0)',
+                fillColor: 'rgba(123,199,124,1.0)',
                 interactive: true,
             }
                     break;
-                case 'Vulnerabilidad moderada':
+                case 'Alta capacidad estructural':
                     return {
-                pane: 'pane_CANARIAS_0',
+                pane: 'pane_Capacidadestructural_0',
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
                 dashArray: '',
@@ -212,13 +223,61 @@
                 weight: 1.0, 
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(255,255,192,1.0)',
+                fillColor: 'rgba(0,68,27,1.0)',
                 interactive: true,
             }
                     break;
-                case 'Baja vulnerabilidad':
+            }
+        }
+        map.createPane('pane_Capacidadestructural_0');
+        map.getPane('pane_Capacidadestructural_0').style.zIndex = 400;
+        map.getPane('pane_Capacidadestructural_0').style['mix-blend-mode'] = 'normal';
+        var layer_Capacidadestructural_0 = new L.geoJson(json_Capacidadestructural_0, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Capacidadestructural_0',
+            layerName: 'layer_Capacidadestructural_0',
+            pane: 'pane_Capacidadestructural_0',
+            onEachFeature: pop_Capacidadestructural_0,
+            style: style_Capacidadestructural_0_0,
+        });
+        bounds_group.addLayer(layer_Capacidadestructural_0);
+        function pop_Redundancia_1(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (var i in e.target._eventParents) {
+                        if (typeof e.target._eventParents[i].resetStyle === 'function') {
+                            e.target._eventParents[i].resetStyle(e.target);
+                        }
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>municipio</strong><br />' + (feature.properties['municipio'] !== null ? autolinker.link(String(feature.properties['municipio']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">isla</th>\
+                        <td class="visible-with-data" id="isla">' + (feature.properties['isla'] !== null ? autolinker.link(String(feature.properties['isla']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Redundancia</th>\
+                        <td class="visible-with-data" id="Redundancia">' + (feature.properties['Redundancia'] !== null ? autolinker.link(String(feature.properties['Redundancia']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            var content = removeEmptyRowsFromPopupContent(popupContent, feature);
+			layer.on('popupopen', function(e) {
+				addClassToPopupIfMedia(content, e.popup);
+			});
+			layer.bindPopup(content, { maxHeight: 400 });
+        }
+
+        function style_Redundancia_1_0(feature) {
+            switch(String(feature.properties['Redundancia'])) {
+                case 'Baja redundancia':
                     return {
-                pane: 'pane_CANARIAS_0',
+                pane: 'pane_Redundancia_1',
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
                 dashArray: '',
@@ -227,13 +286,90 @@
                 weight: 1.0, 
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(166,217,106,1.0)',
+                fillColor: 'rgba(247,251,255,1.0)',
                 interactive: true,
             }
                     break;
-                case 'Muy baja vulnerabilidad':
+                case 'Redundancia media':
                     return {
-                pane: 'pane_CANARIAS_0',
+                pane: 'pane_Redundancia_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(115,178,216,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Alta redundancia':
+                    return {
+                pane: 'pane_Redundancia_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(8,48,107,1.0)',
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_Redundancia_1');
+        map.getPane('pane_Redundancia_1').style.zIndex = 401;
+        map.getPane('pane_Redundancia_1').style['mix-blend-mode'] = 'normal';
+        var layer_Redundancia_1 = new L.geoJson(json_Redundancia_1, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Redundancia_1',
+            layerName: 'layer_Redundancia_1',
+            pane: 'pane_Redundancia_1',
+            onEachFeature: pop_Redundancia_1,
+            style: style_Redundancia_1_0,
+        });
+        bounds_group.addLayer(layer_Redundancia_1);
+        function pop_IRS_2(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (var i in e.target._eventParents) {
+                        if (typeof e.target._eventParents[i].resetStyle === 'function') {
+                            e.target._eventParents[i].resetStyle(e.target);
+                        }
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>municipio</strong><br />' + (feature.properties['municipio'] !== null ? autolinker.link(String(feature.properties['municipio']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">isla</th>\
+                        <td class="visible-with-data" id="isla">' + (feature.properties['isla'] !== null ? autolinker.link(String(feature.properties['isla']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Indice'] !== null ? autolinker.link(String(feature.properties['Indice']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            var content = removeEmptyRowsFromPopupContent(popupContent, feature);
+			layer.on('popupopen', function(e) {
+				addClassToPopupIfMedia(content, e.popup);
+			});
+			layer.bindPopup(content, { maxHeight: 400 });
+        }
+
+        function style_IRS_2_0(feature) {
+            switch(String(feature.properties['Indice'])) {
+                case 'Muy alta resiliencia':
+                    return {
+                pane: 'pane_IRS_2',
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
                 dashArray: '',
@@ -246,24 +382,300 @@
                 interactive: true,
             }
                     break;
+                case 'Alta resiliencia':
+                    return {
+                pane: 'pane_IRS_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(166,217,106,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Resiliencia moderada':
+                    return {
+                pane: 'pane_IRS_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,192,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Baja resiliencia':
+                    return {
+                pane: 'pane_IRS_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(253,174,97,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Muy baja resiliencia':
+                    return {
+                pane: 'pane_IRS_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(215,25,28,1.0)',
+                interactive: true,
+            }
+                    break;
             }
         }
-        map.createPane('pane_CANARIAS_0');
-        map.getPane('pane_CANARIAS_0').style.zIndex = 400;
-        map.getPane('pane_CANARIAS_0').style['mix-blend-mode'] = 'normal';
-        var layer_CANARIAS_0 = new L.geoJson(json_CANARIAS_0, {
+        map.createPane('pane_IRS_2');
+        map.getPane('pane_IRS_2').style.zIndex = 402;
+        map.getPane('pane_IRS_2').style['mix-blend-mode'] = 'normal';
+        var layer_IRS_2 = new L.geoJson(json_IRS_2, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_CANARIAS_0',
-            layerName: 'layer_CANARIAS_0',
-            pane: 'pane_CANARIAS_0',
-            onEachFeature: pop_CANARIAS_0,
-            style: style_CANARIAS_0_0,
+            dataVar: 'json_IRS_2',
+            layerName: 'layer_IRS_2',
+            pane: 'pane_IRS_2',
+            onEachFeature: pop_IRS_2,
+            style: style_IRS_2_0,
         });
-        bounds_group.addLayer(layer_CANARIAS_0);
-        map.addLayer(layer_CANARIAS_0);
+        bounds_group.addLayer(layer_IRS_2);
+        function pop_Presinasistencial_3(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (var i in e.target._eventParents) {
+                        if (typeof e.target._eventParents[i].resetStyle === 'function') {
+                            e.target._eventParents[i].resetStyle(e.target);
+                        }
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>municipio</strong><br />' + (feature.properties['municipio'] !== null ? autolinker.link(String(feature.properties['municipio']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">isla</th>\
+                        <td class="visible-with-data" id="isla">' + (feature.properties['isla'] !== null ? autolinker.link(String(feature.properties['isla']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Vulnerabilidad '] !== null ? autolinker.link(String(feature.properties['Vulnerabilidad ']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Presion asistencial</th>\
+                        <td class="visible-with-data" id="Presion asistencial">' + (feature.properties['Presion asistencial'] !== null ? autolinker.link(String(feature.properties['Presion asistencial']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            var content = removeEmptyRowsFromPopupContent(popupContent, feature);
+			layer.on('popupopen', function(e) {
+				addClassToPopupIfMedia(content, e.popup);
+			});
+			layer.bindPopup(content, { maxHeight: 400 });
+        }
+
+        function style_Presinasistencial_3_0(feature) {
+            switch(String(feature.properties['Presion asistencial'])) {
+                case 'Alta presión asistencial':
+                    return {
+                pane: 'pane_Presinasistencial_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(103,0,13,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Presión asistencial media':
+                    return {
+                pane: 'pane_Presinasistencial_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(251,112,80,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Baja presión asistencial':
+                    return {
+                pane: 'pane_Presinasistencial_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,245,240,1.0)',
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_Presinasistencial_3');
+        map.getPane('pane_Presinasistencial_3').style.zIndex = 403;
+        map.getPane('pane_Presinasistencial_3').style['mix-blend-mode'] = 'normal';
+        var layer_Presinasistencial_3 = new L.geoJson(json_Presinasistencial_3, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Presinasistencial_3',
+            layerName: 'layer_Presinasistencial_3',
+            pane: 'pane_Presinasistencial_3',
+            onEachFeature: pop_Presinasistencial_3,
+            style: style_Presinasistencial_3_0,
+        });
+        bounds_group.addLayer(layer_Presinasistencial_3);
+        function pop_Vulnerabiliadmunicipal_4(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (var i in e.target._eventParents) {
+                        if (typeof e.target._eventParents[i].resetStyle === 'function') {
+                            e.target._eventParents[i].resetStyle(e.target);
+                        }
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>municipio</strong><br />' + (feature.properties['municipio'] !== null ? autolinker.link(String(feature.properties['municipio']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Vulnerabilidad </th>\
+                        <td>' + (feature.properties['Vulnerabilidad '] !== null ? autolinker.link(String(feature.properties['Vulnerabilidad ']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            var content = removeEmptyRowsFromPopupContent(popupContent, feature);
+			layer.on('popupopen', function(e) {
+				addClassToPopupIfMedia(content, e.popup);
+			});
+			layer.bindPopup(content, { maxHeight: 400 });
+        }
+
+        function style_Vulnerabiliadmunicipal_4_0(feature) {
+            if (feature.properties['Vmun'] >= 0.256555 && feature.properties['Vmun'] <= 0.548102 ) {
+                return {
+                pane: 'pane_Vulnerabiliadmunicipal_4',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(26,150,65,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['Vmun'] >= 0.548102 && feature.properties['Vmun'] <= 0.597057 ) {
+                return {
+                pane: 'pane_Vulnerabiliadmunicipal_4',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(166,217,106,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['Vmun'] >= 0.597057 && feature.properties['Vmun'] <= 0.698721 ) {
+                return {
+                pane: 'pane_Vulnerabiliadmunicipal_4',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,192,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['Vmun'] >= 0.698721 && feature.properties['Vmun'] <= 0.848891 ) {
+                return {
+                pane: 'pane_Vulnerabiliadmunicipal_4',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(253,174,97,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['Vmun'] >= 0.848891 && feature.properties['Vmun'] <= 0.850000 ) {
+                return {
+                pane: 'pane_Vulnerabiliadmunicipal_4',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(215,25,28,1.0)',
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_Vulnerabiliadmunicipal_4');
+        map.getPane('pane_Vulnerabiliadmunicipal_4').style.zIndex = 404;
+        map.getPane('pane_Vulnerabiliadmunicipal_4').style['mix-blend-mode'] = 'normal';
+        var layer_Vulnerabiliadmunicipal_4 = new L.geoJson(json_Vulnerabiliadmunicipal_4, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Vulnerabiliadmunicipal_4',
+            layerName: 'layer_Vulnerabiliadmunicipal_4',
+            pane: 'pane_Vulnerabiliadmunicipal_4',
+            onEachFeature: pop_Vulnerabiliadmunicipal_4,
+            style: style_Vulnerabiliadmunicipal_4_0,
+        });
+        bounds_group.addLayer(layer_Vulnerabiliadmunicipal_4);
         var overlaysTree = [
-            {label: 'CANARIAS<br /><table><tr><td style="text-align: center;"><img src="legend/CANARIAS_0_Muyaltavulnerabilidad0.png" /></td><td>Muy alta vulnerabilidad</td></tr><tr><td style="text-align: center;"><img src="legend/CANARIAS_0_Altavulnerabilidad1.png" /></td><td>Alta vulnerabilidad</td></tr><tr><td style="text-align: center;"><img src="legend/CANARIAS_0_Vulnerabilidadmoderada2.png" /></td><td>Vulnerabilidad moderada</td></tr><tr><td style="text-align: center;"><img src="legend/CANARIAS_0_Bajavulnerabilidad3.png" /></td><td>Baja vulnerabilidad</td></tr><tr><td style="text-align: center;"><img src="legend/CANARIAS_0_Muybajavulnerabilidad4.png" /></td><td>Muy baja vulnerabilidad</td></tr></table>', layer: layer_CANARIAS_0},]
+            {label: 'Vulnerabiliad municipal<br /><table><tr><td style="text-align: center;"><img src="legend/Vulnerabiliadmunicipal_4_Muybajavulnerabilidad0.png" /></td><td>Muy baja vulnerabilidad </td></tr><tr><td style="text-align: center;"><img src="legend/Vulnerabiliadmunicipal_4_Bajavulnerabilidad1.png" /></td><td>Baja vulnerabilidad </td></tr><tr><td style="text-align: center;"><img src="legend/Vulnerabiliadmunicipal_4_Vulnerabilidadmoderada2.png" /></td><td>Vulnerabilidad moderada</td></tr><tr><td style="text-align: center;"><img src="legend/Vulnerabiliadmunicipal_4_Altavulnerabilidad3.png" /></td><td>Alta vulnerabilidad </td></tr><tr><td style="text-align: center;"><img src="legend/Vulnerabiliadmunicipal_4_Muyaltavulnerabilidad4.png" /></td><td>Muy alta vulnerabilidad</td></tr></table>', layer: layer_Vulnerabiliadmunicipal_4},
+            {label: 'Presión asistencial<br /><table><tr><td style="text-align: center;"><img src="legend/Presinasistencial_3_Altapresiónasistencial0.png" /></td><td>Alta presión asistencial</td></tr><tr><td style="text-align: center;"><img src="legend/Presinasistencial_3_Presiónasistencialmedia1.png" /></td><td>Presión asistencial media</td></tr><tr><td style="text-align: center;"><img src="legend/Presinasistencial_3_Bajapresiónasistencial2.png" /></td><td>Baja presión asistencial</td></tr></table>', layer: layer_Presinasistencial_3},
+            {label: 'IRS<br /><table><tr><td style="text-align: center;"><img src="legend/IRS_2_Muyaltaresiliencia0.png" /></td><td>Muy alta resiliencia</td></tr><tr><td style="text-align: center;"><img src="legend/IRS_2_Altaresiliencia1.png" /></td><td>Alta resiliencia</td></tr><tr><td style="text-align: center;"><img src="legend/IRS_2_Resilienciamoderada2.png" /></td><td>Resiliencia moderada</td></tr><tr><td style="text-align: center;"><img src="legend/IRS_2_Bajaresiliencia3.png" /></td><td>Baja resiliencia</td></tr><tr><td style="text-align: center;"><img src="legend/IRS_2_Muybajaresiliencia4.png" /></td><td>Muy baja resiliencia</td></tr></table>', layer: layer_IRS_2},
+            {label: 'Redundancia<br /><table><tr><td style="text-align: center;"><img src="legend/Redundancia_1_Bajaredundancia0.png" /></td><td>Baja redundancia</td></tr><tr><td style="text-align: center;"><img src="legend/Redundancia_1_Redundanciamedia1.png" /></td><td>Redundancia media</td></tr><tr><td style="text-align: center;"><img src="legend/Redundancia_1_Altaredundancia2.png" /></td><td>Alta redundancia</td></tr></table>', layer: layer_Redundancia_1},
+            {label: 'Capacidad estructural<br /><table><tr><td style="text-align: center;"><img src="legend/Capacidadestructural_0_Bajacapacidadestructural0.png" /></td><td>Baja capacidad estructural</td></tr><tr><td style="text-align: center;"><img src="legend/Capacidadestructural_0_Capacidadestructuralmedia1.png" /></td><td>Capacidad estructural media</td></tr><tr><td style="text-align: center;"><img src="legend/Capacidadestructural_0_Altacapacidadestructural2.png" /></td><td>Alta capacidad estructural</td></tr></table>', layer: layer_Capacidadestructural_0},]
         var lay = L.control.layers.tree(null, overlaysTree,{
             //namedToggle: true,
             //selectorBack: false,
@@ -276,12 +688,64 @@
         lay.addTo(map);
         setBounds();
         var i = 0;
-        layer_CANARIAS_0.eachLayer(function(layer) {
+        layer_Capacidadestructural_0.eachLayer(function(layer) {
             var context = {
                 feature: layer.feature,
                 variables: {}
             };
-            layer.bindTooltip((layer.feature.properties['municipio'] !== null?String('<div style="color: #000000; font-size: 10pt; font-family: \'Open Sans\', sans-serif;">' + layer.feature.properties['municipio']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_CANARIAS_0'});
+            layer.bindTooltip((layer.feature.properties['municipio'] !== null?String('<div style="color: #000000; font-size: 10pt; font-family: \'Open Sans\', sans-serif;">' + layer.feature.properties['municipio']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_Capacidadestructural_0'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+        var i = 0;
+        layer_Redundancia_1.eachLayer(function(layer) {
+            var context = {
+                feature: layer.feature,
+                variables: {}
+            };
+            layer.bindTooltip((layer.feature.properties['municipio'] !== null?String('<div style="color: #000000; font-size: 10pt; font-family: \'Open Sans\', sans-serif;">' + layer.feature.properties['municipio']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_Redundancia_1'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+        var i = 0;
+        layer_IRS_2.eachLayer(function(layer) {
+            var context = {
+                feature: layer.feature,
+                variables: {}
+            };
+            layer.bindTooltip((layer.feature.properties['municipio'] !== null?String('<div style="color: #000000; font-size: 10pt; font-family: \'Open Sans\', sans-serif;">' + layer.feature.properties['municipio']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_IRS_2'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+        var i = 0;
+        layer_Presinasistencial_3.eachLayer(function(layer) {
+            var context = {
+                feature: layer.feature,
+                variables: {}
+            };
+            layer.bindTooltip((layer.feature.properties['municipio'] !== null?String('<div style="color: #000000; font-size: 10pt; font-family: \'Open Sans\', sans-serif;">' + layer.feature.properties['municipio']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_Presinasistencial_3'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+        var i = 0;
+        layer_Vulnerabiliadmunicipal_4.eachLayer(function(layer) {
+            var context = {
+                feature: layer.feature,
+                variables: {}
+            };
+            layer.bindTooltip((layer.feature.properties['municipio'] !== null?String('<div style="color: #000000; font-size: 10pt; font-family: \'Open Sans\', sans-serif;">' + layer.feature.properties['municipio']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_Vulnerabiliadmunicipal_4'});
             labels.push(layer);
             totalMarkers += 1;
               layer.added = true;
@@ -307,7 +771,7 @@
         document.getElementById("all").appendChild(col1);
         document.getElementById("all").appendChild(col2);
         col1.appendChild(mapDiv)
-        var Filters = {"Vulnerabilidad ": "str"};
+        var Filters = {"Indice": "str","Redundancia": "str","Capacidad": "str","Vulnerabilidad ": "str","Presion asistencial": "str"};
         function filterFunc() {
           map.eachLayer(function(lyr){
           if ("options" in lyr && "dataVar" in lyr["options"]){
@@ -395,12 +859,64 @@
           this[lyr["options"]["layerName"]].clearLayers();
           this[lyr["options"]["layerName"]].addData(features);
         var i = 0;
-        layer_CANARIAS_0.eachLayer(function(layer) {
+        layer_Capacidadestructural_0.eachLayer(function(layer) {
             var context = {
                 feature: layer.feature,
                 variables: {}
             };
-            layer.bindTooltip((layer.feature.properties['municipio'] !== null?String('<div style="color: #000000; font-size: 10pt; font-family: \'Open Sans\', sans-serif;">' + layer.feature.properties['municipio']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_CANARIAS_0'});
+            layer.bindTooltip((layer.feature.properties['municipio'] !== null?String('<div style="color: #000000; font-size: 10pt; font-family: \'Open Sans\', sans-serif;">' + layer.feature.properties['municipio']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_Capacidadestructural_0'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+        var i = 0;
+        layer_Redundancia_1.eachLayer(function(layer) {
+            var context = {
+                feature: layer.feature,
+                variables: {}
+            };
+            layer.bindTooltip((layer.feature.properties['municipio'] !== null?String('<div style="color: #000000; font-size: 10pt; font-family: \'Open Sans\', sans-serif;">' + layer.feature.properties['municipio']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_Redundancia_1'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+        var i = 0;
+        layer_IRS_2.eachLayer(function(layer) {
+            var context = {
+                feature: layer.feature,
+                variables: {}
+            };
+            layer.bindTooltip((layer.feature.properties['municipio'] !== null?String('<div style="color: #000000; font-size: 10pt; font-family: \'Open Sans\', sans-serif;">' + layer.feature.properties['municipio']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_IRS_2'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+        var i = 0;
+        layer_Presinasistencial_3.eachLayer(function(layer) {
+            var context = {
+                feature: layer.feature,
+                variables: {}
+            };
+            layer.bindTooltip((layer.feature.properties['municipio'] !== null?String('<div style="color: #000000; font-size: 10pt; font-family: \'Open Sans\', sans-serif;">' + layer.feature.properties['municipio']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_Presinasistencial_3'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+        var i = 0;
+        layer_Vulnerabiliadmunicipal_4.eachLayer(function(layer) {
+            var context = {
+                feature: layer.feature,
+                variables: {}
+            };
+            layer.bindTooltip((layer.feature.properties['municipio'] !== null?String('<div style="color: #000000; font-size: 10pt; font-family: \'Open Sans\', sans-serif;">' + layer.feature.properties['municipio']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_Vulnerabiliadmunicipal_4'});
             labels.push(layer);
             totalMarkers += 1;
               layer.added = true;
@@ -410,6 +926,104 @@
           }
           })
         }
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_Indice = document.createElement('div');
+            div_Indice.id = "div_Indice";
+            div_Indice.className= "filterselect";
+            document.getElementById("menu").appendChild(div_Indice);
+            sel_Indice = document.createElement('select');
+            sel_Indice.multiple = true;
+            sel_Indice.size = 5;
+            sel_Indice.id = "sel_Indice";
+            var Indice_options_str = "<option value='' unselected></option>";
+            sel_Indice.onchange = function(){filterFunc()};
+            Indice_options_str  += '<option value="Alta resiliencia">Alta resiliencia</option>';
+            Indice_options_str  += '<option value="Baja resiliencia">Baja resiliencia</option>';
+            Indice_options_str  += '<option value="Muy alta resiliencia">Muy alta resiliencia</option>';
+            Indice_options_str  += '<option value="Muy baja resiliencia">Muy baja resiliencia</option>';
+            Indice_options_str  += '<option value="Resiliencia moderada">Resiliencia moderada</option>';
+            sel_Indice.innerHTML = Indice_options_str;
+            div_Indice.appendChild(sel_Indice);
+            var lab_Indice = document.createElement('div');
+            lab_Indice.innerHTML = 'Indice';
+            lab_Indice.className = 'filterlabel';
+            div_Indice.appendChild(lab_Indice);
+            var reset_Indice = document.createElement('div');
+            reset_Indice.innerHTML = 'clear filter';
+            reset_Indice.className = 'filterlabel';
+            reset_Indice.onclick = function() {
+                var options = document.getElementById("sel_Indice").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_Indice.appendChild(reset_Indice);
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_Redundancia = document.createElement('div');
+            div_Redundancia.id = "div_Redundancia";
+            div_Redundancia.className= "filterselect";
+            document.getElementById("menu").appendChild(div_Redundancia);
+            sel_Redundancia = document.createElement('select');
+            sel_Redundancia.multiple = true;
+            sel_Redundancia.size = 3;
+            sel_Redundancia.id = "sel_Redundancia";
+            var Redundancia_options_str = "<option value='' unselected></option>";
+            sel_Redundancia.onchange = function(){filterFunc()};
+            Redundancia_options_str  += '<option value="Alta redundancia">Alta redundancia</option>';
+            Redundancia_options_str  += '<option value="Baja redundancia">Baja redundancia</option>';
+            Redundancia_options_str  += '<option value="Redundancia media">Redundancia media</option>';
+            sel_Redundancia.innerHTML = Redundancia_options_str;
+            div_Redundancia.appendChild(sel_Redundancia);
+            var lab_Redundancia = document.createElement('div');
+            lab_Redundancia.innerHTML = 'Redundancia';
+            lab_Redundancia.className = 'filterlabel';
+            div_Redundancia.appendChild(lab_Redundancia);
+            var reset_Redundancia = document.createElement('div');
+            reset_Redundancia.innerHTML = 'clear filter';
+            reset_Redundancia.className = 'filterlabel';
+            reset_Redundancia.onclick = function() {
+                var options = document.getElementById("sel_Redundancia").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_Redundancia.appendChild(reset_Redundancia);
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_Capacidad = document.createElement('div');
+            div_Capacidad.id = "div_Capacidad";
+            div_Capacidad.className= "filterselect";
+            document.getElementById("menu").appendChild(div_Capacidad);
+            sel_Capacidad = document.createElement('select');
+            sel_Capacidad.multiple = true;
+            sel_Capacidad.size = 3;
+            sel_Capacidad.id = "sel_Capacidad";
+            var Capacidad_options_str = "<option value='' unselected></option>";
+            sel_Capacidad.onchange = function(){filterFunc()};
+            Capacidad_options_str  += '<option value="Alta capacidad estructural">Alta capacidad estructural</option>';
+            Capacidad_options_str  += '<option value="Baja capacidad estructural">Baja capacidad estructural</option>';
+            Capacidad_options_str  += '<option value="Capacidad estructural media">Capacidad estructural media</option>';
+            sel_Capacidad.innerHTML = Capacidad_options_str;
+            div_Capacidad.appendChild(sel_Capacidad);
+            var lab_Capacidad = document.createElement('div');
+            lab_Capacidad.innerHTML = 'Capacidad';
+            lab_Capacidad.className = 'filterlabel';
+            div_Capacidad.appendChild(lab_Capacidad);
+            var reset_Capacidad = document.createElement('div');
+            reset_Capacidad.innerHTML = 'clear filter';
+            reset_Capacidad.className = 'filterlabel';
+            reset_Capacidad.onclick = function() {
+                var options = document.getElementById("sel_Capacidad").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_Capacidad.appendChild(reset_Capacidad);
             document.getElementById("menu").appendChild(
                 document.createElement("div"));
             var div_Vulnerabilidad = document.createElement('div');
@@ -444,15 +1058,47 @@
                 filterFunc();
             };
             div_Vulnerabilidad.appendChild(reset_Vulnerabilidad);
-        resetLabels([layer_CANARIAS_0]);
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_Presionasistencial = document.createElement('div');
+            div_Presionasistencial.id = "div_Presionasistencial";
+            div_Presionasistencial.className= "filterselect";
+            document.getElementById("menu").appendChild(div_Presionasistencial);
+            sel_Presionasistencial = document.createElement('select');
+            sel_Presionasistencial.multiple = true;
+            sel_Presionasistencial.size = 3;
+            sel_Presionasistencial.id = "sel_Presionasistencial";
+            var Presionasistencial_options_str = "<option value='' unselected></option>";
+            sel_Presionasistencial.onchange = function(){filterFunc()};
+            Presionasistencial_options_str  += '<option value="Alta presión asistencial">Alta presión asistencial</option>';
+            Presionasistencial_options_str  += '<option value="Baja presión asistencial">Baja presión asistencial</option>';
+            Presionasistencial_options_str  += '<option value="Presión asistencial media">Presión asistencial media</option>';
+            sel_Presionasistencial.innerHTML = Presionasistencial_options_str;
+            div_Presionasistencial.appendChild(sel_Presionasistencial);
+            var lab_Presionasistencial = document.createElement('div');
+            lab_Presionasistencial.innerHTML = 'Presion asistencial';
+            lab_Presionasistencial.className = 'filterlabel';
+            div_Presionasistencial.appendChild(lab_Presionasistencial);
+            var reset_Presionasistencial = document.createElement('div');
+            reset_Presionasistencial.innerHTML = 'clear filter';
+            reset_Presionasistencial.className = 'filterlabel';
+            reset_Presionasistencial.onclick = function() {
+                var options = document.getElementById("sel_Presionasistencial").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_Presionasistencial.appendChild(reset_Presionasistencial);
+        resetLabels([layer_Capacidadestructural_0,layer_Redundancia_1,layer_IRS_2,layer_Presinasistencial_3,layer_Vulnerabiliadmunicipal_4]);
         map.on("zoomend", function(){
-            resetLabels([layer_CANARIAS_0]);
+            resetLabels([layer_Capacidadestructural_0,layer_Redundancia_1,layer_IRS_2,layer_Presinasistencial_3,layer_Vulnerabiliadmunicipal_4]);
         });
         map.on("layeradd", function(){
-            resetLabels([layer_CANARIAS_0]);
+            resetLabels([layer_Capacidadestructural_0,layer_Redundancia_1,layer_IRS_2,layer_Presinasistencial_3,layer_Vulnerabiliadmunicipal_4]);
         });
         map.on("layerremove", function(){
-            resetLabels([layer_CANARIAS_0]);
+            resetLabels([layer_Capacidadestructural_0,layer_Redundancia_1,layer_IRS_2,layer_Presinasistencial_3,layer_Vulnerabiliadmunicipal_4]);
         });
         </script>        
     </body>
